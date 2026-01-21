@@ -1,68 +1,37 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: GitHub Copilot <copilot@example.com>
-Date: Wed, 21 Jan 2026 00:00:00 +0000
-Subject: [PATCH] Add GitHub Actions workflow to build Hugo and deploy to gh-pages; update baseURL
+name: Build and deploy Hugo site to GitHub Pages
+on:
+  push:
+    branches:
+      - main
+      - master
 
----
- .github/workflows/deploy.yml |  53 ++++++++++++++++++++++++++++++++++++++++++++++
- config.toml                  |   1 +
- 2 files changed, 54 insertions(+)
- create mode 100644 .github/workflows/deploy.yml
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
 
-diff --git a/.github/workflows/deploy.yml b/.github/workflows/deploy.yml
-new file mode 100644
-index 0000000..1111111
---- /dev/null
-+++ b/.github/workflows/deploy.yml
-@@ -0,0 +1,53 @@
-+name: Build and deploy Hugo site to GitHub Pages
-+
-+on:
-+  push:
-+    branches:
-+      - main
-+      - master
-+
-+jobs:
-+  build-deploy:
-+    runs-on: ubuntu-latest
-+    steps:
-+      - name: Checkout repository
-+        uses: actions/checkout@v4
-+        with:
-+          submodules: true
-+          fetch-depth: 0
-+
-+      - name: Setup Hugo
-+        uses: peaceiris/actions-hugo@v2
-+        with:
-+          hugo-version: '0.72.0' # change to a newer Hugo if you prefer
-+
-+      - name: Build site
-+        run: hugo -t introduction -d public --gc --minify --baseURL "https://desirajusantosh.github.io/santosh-blog/"
-+
-+      - name: Ensure .nojekyll
-+        run: touch public/.nojekyll
-+
-+      - name: Deploy to gh-pages
-+        uses: peaceiris/actions-gh-pages@v3
-+        with:
-+          publish_branch: gh-pages
-+          publish_dir: ./public
-+          allow_empty_commit: false
-+          github_token: ${{ secrets.GITHUB_TOKEN }}
-+
-diff --git a/config.toml b/config.toml
-index 2222222..3333333 100644
---- a/config.toml
-+++ b/config.toml
-@@ -1,7 +1,7 @@
--baseURL                          = "https://desirajusantosh.github.io/me/"  # Your domain name. Must end with "/"
-+baseURL                          = "https://desirajusantosh.github.io/santosh-blog/"  # Your domain name. Must end with "/"
- theme                            = "introduction"
- DefaultContentLanguage           = "en"                    # Default language for multilingual sites
- # disqusshortname                 = ""                       # https://gohugo.io/content-management/comments
- googleAnalytics                  = "G-152PCJSKRY"                       # https://gohugo.io/templates/internal/#google-analytics
- canonifyURLs 			 = true
---
-2.41.0
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: '0.72.0' # change to newer version if desired
+
+      - name: Build site
+        run: |
+          hugo -t introduction -d public --gc --minify --baseURL "https://desirajusantosh.github.io/santosh-blog/"
+
+      - name: Ensure .nojekyll
+        run: touch public/.nojekyll
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          publish_branch: gh-pages
+          publish_dir: ./public
+          allow_empty_commit: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
