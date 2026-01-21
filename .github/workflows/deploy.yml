@@ -17,6 +17,15 @@ jobs:
           submodules: true
           fetch-depth: 0
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'       # Node 18 LTS is a safe choice
+
+      - name: Install PostCSS CLI and plugins
+        run: |
+          npm install -g postcss-cli autoprefixer
+
       - name: Setup Hugo (extended)
         uses: peaceiris/actions-hugo@v2
         with:
