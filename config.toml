@@ -4,7 +4,7 @@ theme                            = "introduction"
 DefaultContentLanguage           = "en"                    # Default language for multilingual sites
 # disqusshortname                 = ""                       # https://gohugo.io/content-management/comments
 googleAnalytics                  = "G-152PCJSKRY"                       # https://gohugo.io/templates/internal/#google-analytics
-canonifyURLs 			 = false
+canonifyURLs 			 = true
 # Add relativeURLs to true
 relativeURLs = true
 
