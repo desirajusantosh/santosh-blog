@@ -6,7 +6,7 @@ DefaultContentLanguage           = "en"                    # Default language fo
 googleAnalytics                  = "G-152PCJSKRY"                       # https://gohugo.io/templates/internal/#google-analytics
 canonifyURLs 			 = true
 # Add relativeURLs to true
-relativeURLs = true
+relativeURLs = false
 
 [params]
     themeStyle                   = "dark"                 # Choose "light" or "dark"
