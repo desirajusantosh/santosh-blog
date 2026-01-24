@@ -22,4 +22,4 @@
 [blog_shareThis]
     other = "Share this"
 [footer_text]
-    other = "[**Introduction**](https://github.com/victoriadrake/hugo-theme-introduction/) theme for [Hugo](http://gohugo.io/) - Made with <i class=\"far fa-heart\" aria-hidden="true"></i> and <i class=\"fas fa-coffee\"></i> by open source contributors. [Netlify](https://www.netlify.com/) used to build and host this site, now its gh pages"
+    other = "[**Introduction**](https://github.com/victoriadrake/hugo-theme-introduction/) theme for [Hugo](http://gohugo.io/) - Made with <i class=\\\"far fa-heart\\\" aria-hidden=\\\"true\\\"></i> and <i class=\\\"fas fa-coffee\\\"></i> by open source contributors. [Netlify](https://www.netlify.com/) used to build and host this site, now its gh pages"
