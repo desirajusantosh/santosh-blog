@@ -1,19 +1,16 @@
 #baseURL                          = "https://desirajusantosh.github.io/me/"  # Your domain name. Must end with "/"
 baseURL = "https://desirajusantosh.github.io/santosh-blog/"
-theme                            = "introduction"
 DefaultContentLanguage           = "en"                    # Default language for multilingual sites
 # disqusshortname                 = ""                       # https://gohugo.io/content-management/comments
 googleAnalytics                  = "G-152PCJSKRY"                       # https://gohugo.io/templates/internal/#google-analytics
 canonifyURLs 			 = true
 # Add relativeURLs to true
 relativeURLs = false
+timeout = "10m"                   # first build resizes large photos; can take a few minutes
 
 [params]
-    themeStyle                   = "dark"                 # Choose "light" or "dark"
+    shortName                    = "Santosh Desiraju"     # Shown in the top-left of every page
     favicon                      = "/img/fav.ico"          # Path to favicon file
-    showRSSButton                = false                   # Show rss button in navigation
-    fadeIn                       = false                    # Turn on/off the fade-in effect
-    fadeInIndex                  = true                   # Turn on/off the fade-in effect on the index page even if fade-in was otherwise turned off
     dateFormat                   = "Jan 2, 2006"
     email                        = "desirajusantosh@gmail.com"   # E-mail address for contact section
     # customCSS                    = ["foo.css"]             # Include custom css files placed under assets/
@@ -28,34 +25,28 @@ relativeURLs = false
         localTime                = true                    # Show your current local time in contact section
         timeZone                 = "America/Los_Angeles"   # Your timezone as in the TZ* column of this list: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
         timeFormat               = "h:mm A"                # https://momentjs.com/docs/#/displaying/format/
-    [params.projects]
-        useTwoColumns            = false                   # Use a layout with two columns instead of three
 
-    # Share buttons on blog post pages
-    [params.share]
-        twitter                  = true
-        facebook                 = true
-        googlePlus               = false
-        pinterest                = true
-
-    # Social icons appear in introduction and contact section. Add as many more as you like.
-    # Icon pack "fab" includes social network icons, see: https://fontawesome.com/icons?d=gallery&s=brands&m=free
-    # Icon pack "fas" includes solid style icons, see: https://fontawesome.com/icons?d=gallery&s=solid&m=free
+    # Social links appear in the intro and footer. Available icons live in layouts/partials/icon.html
+    # (twitter, instagram, linkedin-in, github, paper-plane, mail).
     [[params.social]]
         url   = "https://twitter.com/optimumprimes"
-        icon  = "twitter" # icon name without the 'fa-'
+        icon  = "twitter"
+        label = "Twitter"
         icon_pack = "fab"
     [[params.social]]
         url   = "https://instagram.com/dsantoshb"
-        icon  = "instagram" # icon name without the 'fa-'
+        icon  = "instagram"
+        label = "Instagram"
         icon_pack = "fab"
     [[params.social]]
         url   = "https://linkedin.com/in/desirajusantosh"
-        icon  = "linkedin-in" # icon name without the 'fa-'
+        icon  = "linkedin-in"
+        label = "LinkedIn"
         icon_pack = "fab"
     [[params.social]]
         url = "mailto:desirajusantosh@gmail.com"  # For a direct email link, use "mailto:test@example.org".
-        icon = "paper-plane" # icon name without the 'fa-'
+        icon = "paper-plane"
+        label = "Email"
         icon_pack = "fas"
 
 
@@ -68,6 +59,10 @@ relativeURLs = false
 #     name    = "Blog"
 #     url     = "/blog/"
 #     weight  = 1
+
+[markup.highlight]
+  style = "github-dark"
+  noClasses = true
 
 # We only use tag as a taxonomies
 # You can add more by yourself

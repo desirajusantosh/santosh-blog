@@ -1,5 +1,6 @@
 ---
-title: "Restaurant recommendations "
+title: "Restaurant recommendations"
+description: "Vegetarian & vegan spots I keep going back to"
 weight: 1
 ---
 

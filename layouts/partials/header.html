@@ -1,0 +1,18 @@
+{{ $home := "" | relLangURL }}
+{{ $section := .Section }}
+<header class="site-header">
+  <div class="wrap header-inner">
+    {{ $name := split (.Site.Params.shortName | default .Site.Title) " " }}
+    <a class="brand" href="{{ $home }}">{{ index $name 0 }}<span class="brand-rest"> {{ delimit (after 1 $name) " " }}</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <a href="{{ "blog/" | relLangURL }}" {{ if eq $section "blog" }}aria-current="page"{{ end }}>Writing</a>
+      <a href="{{ "projects/" | relLangURL }}" {{ if eq $section "projects" }}aria-current="page"{{ end }}>Photos &amp; lists</a>
+      <a href="{{ $home }}#about">About</a>
+      <a href="{{ $home }}#contact">Contact</a>
+      <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+        <span class="icon-sun">{{ partial "icon.html" "sun" }}</span>
+        <span class="icon-moon">{{ partial "icon.html" "moon" }}</span>
+      </button>
+    </nav>
+  </div>
+</header>

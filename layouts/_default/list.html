@@ -1,0 +1,10 @@
+{{ define "main" }}
+<section class="wrap narrow page-head">
+  <p class="eyebrow">{{ if eq .Kind "term" }}Tagged{{ else }}&nbsp;{{ end }}</p>
+  <h1 class="display-sm">{{ .Title | markdownify }}</h1>
+  {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+</section>
+<section class="wrap narrow">
+  {{ partial "post-list.html" .Pages.ByDate.Reverse }}
+</section>
+{{ end }}

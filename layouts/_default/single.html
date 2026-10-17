@@ -1,0 +1,28 @@
+{{ define "main" }}
+<article class="wrap narrow post">
+  <a class="back" href="{{ .Parent.RelPermalink }}">{{ partial "icon.html" "arrow-left" }} {{ if eq .Section "blog" }}All writing{{ else }}{{ .Parent.Title }}{{ end }}</a>
+  <header class="post-header">
+    <h1 class="display-sm">{{ .Title | markdownify }}</h1>
+    <p class="post-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format (.Site.Params.dateFormat | default "Jan 2, 2006") }}</time>
+      <span aria-hidden="true">·</span> {{ .ReadingTime }} min read
+      {{ range complement (slice "blog") (.Params.tags | default slice) }}
+      <a class="tag" href="{{ "tags/" | relLangURL }}{{ . | urlize }}/">{{ . }}</a>
+      {{ end }}
+    </p>
+  </header>
+
+  {{ $images := .Resources.ByType "image" }}
+  {{ if $images }}{{ partial "gallery.html" (dict "images" $images "page" .) }}{{ end }}
+
+  <div class="prose">{{ .Content }}</div>
+
+  <footer class="post-footer">
+    <button class="button ghost share-btn" type="button" data-title="{{ .Title }}" data-url="{{ .Permalink }}">{{ partial "icon.html" "share" }} <span>Share</span></button>
+    <nav class="post-nav" aria-label="More posts">
+      {{ with .NextInSection }}<a class="prev" href="{{ .RelPermalink }}"><small>Newer</small>{{ .Title | markdownify }}</a>{{ end }}
+      {{ with .PrevInSection }}<a class="next" href="{{ .RelPermalink }}"><small>Older</small>{{ .Title | markdownify }}</a>{{ end }}
+    </nav>
+  </footer>
+</article>
+{{ end }}

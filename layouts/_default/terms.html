@@ -1,0 +1,12 @@
+{{ define "main" }}
+<section class="wrap narrow page-head">
+  <h1 class="display-sm">Tags</h1>
+</section>
+<section class="wrap narrow">
+  <ul class="tag-cloud">
+    {{ range .Data.Terms.ByCount }}
+    <li><a class="tag" href="{{ .Page.RelPermalink }}">{{ .Page.Title }} <span class="muted">{{ .Count }}</span></a></li>
+    {{ end }}
+  </ul>
+</section>
+{{ end }}

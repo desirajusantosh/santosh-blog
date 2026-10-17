@@ -1,0 +1,22 @@
+{{ define "main" }}
+{{ $images := .Resources.ByType "image" }}
+{{ $isGallery := gt (len $images) 1 }}
+<article class="wrap {{ if not $isGallery }}narrow{{ end }} project">
+  <a class="back" href="{{ .Parent.RelPermalink }}">{{ partial "icon.html" "arrow-left" }} Photos &amp; lists</a>
+  <header class="post-header">
+    <h1 class="display-sm">{{ .Title | markdownify }}</h1>
+    {{ if $isGallery }}<p class="post-meta">{{ len $images }} photos · tap any photo to view it full screen</p>{{ end }}
+  </header>
+
+  {{ with .Content }}<div class="prose {{ if $isGallery }}narrow-prose{{ end }}">{{ . }}</div>{{ end }}
+
+  {{ if $isGallery }}
+    {{ partial "gallery.html" (dict "images" $images "page" . "download" (eq (lower .File.ContentBaseName) "wallpapers")) }}
+  {{ else }}
+    {{ range $images }}
+      {{ $img := .Resize "1400x webp q80" }}
+      <figure class="single-figure"><img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="" loading="lazy"></figure>
+    {{ end }}
+  {{ end }}
+</article>
+{{ end }}

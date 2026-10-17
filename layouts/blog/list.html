@@ -1,0 +1,14 @@
+{{ define "main" }}
+<section class="wrap narrow page-head">
+  <h1 class="display-sm">Writing</h1>
+  <p class="lede">Notes on product, how-tos I wish I'd had, and trips worth remembering.</p>
+</section>
+<section class="wrap narrow">
+  {{ range .Pages.GroupByDate "2006" }}
+  <div class="year-group">
+    <h2 class="year">{{ .Key }}</h2>
+    {{ partial "post-list.html" .Pages }}
+  </div>
+  {{ end }}
+</section>
+{{ end }}

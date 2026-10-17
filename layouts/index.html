@@ -1,0 +1,64 @@
+{{ define "bodyClass" }}is-home{{ end }}
+{{ define "main" }}
+{{ $homeBundle := .Site.GetPage "/home" }}
+{{ $intro := $homeBundle.Resources.GetMatch "index.md" }}
+{{ $about := $homeBundle.Resources.GetMatch "about.md" }}
+{{ $contact := $homeBundle.Resources.GetMatch "contact.md" }}
+
+<section class="hero wrap">
+  <div class="hero-text">
+    <p class="eyebrow">Product · Hardware · Travel · Photography</p>
+    <h1 class="display">{{ with $homeBundle }}{{ .Title | markdownify }}{{ else }}{{ .Site.Title }}{{ end }}</h1>
+    <div class="lede">{{ with $homeBundle }}{{ .Content }}{{ end }}</div>
+    {{ partial "social.html" . }}
+  </div>
+  {{ with $about }}{{ with .Params.image }}{{ with $homeBundle.Resources.GetMatch . }}
+  {{ $img := .Fill "560x560 Center webp q82" }}
+  <figure class="hero-portrait">
+    <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="Portrait of {{ $.Site.Title }}">
+  </figure>
+  {{ end }}{{ end }}{{ end }}
+</section>
+
+{{ $projects := .Site.GetPage "/projects" }}
+{{ with $projects }}
+<section class="section wrap" id="photos">
+  <div class="section-head">
+    <h2>Photos &amp; lists</h2>
+    <a class="more" href="{{ .RelPermalink }}">See all {{ partial "icon.html" "arrow-right" }}</a>
+  </div>
+  <div class="card-grid">
+    {{ range .Pages.ByWeight }}{{ partial "project-card.html" . }}{{ end }}
+  </div>
+</section>
+{{ end }}
+
+{{ with .Site.GetPage "/blog" }}
+<section class="section wrap" id="writing">
+  <div class="section-head">
+    <h2>Recent writing</h2>
+    <a class="more" href="{{ .RelPermalink }}">All posts {{ partial "icon.html" "arrow-right" }}</a>
+  </div>
+  {{ partial "post-list.html" (first 6 .Pages.ByDate.Reverse) }}
+</section>
+{{ end }}
+
+{{ with $about }}
+<section class="section wrap narrow" id="about">
+  <h2>{{ .Title }}</h2>
+  <div class="prose">{{ .Content }}</div>
+</section>
+{{ end }}
+
+<section class="section wrap narrow contact" id="contact">
+  <h2>Say hello</h2>
+  {{ with $contact }}{{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}{{ end }}
+  <p>Always up for a conversation about product, travel hacking, food or photography.</p>
+  {{ with .Site.Params.email }}
+  <a class="button" href="mailto:{{ . }}">{{ partial "icon.html" "mail" }} {{ . }}</a>
+  {{ end }}
+  {{ if .Site.Params.home.localTime }}
+  <p class="muted local-time" data-time-zone="{{ .Site.Params.home.timeZone }}">It's <span class="time">—</span> where I am.</p>
+  {{ end }}
+</section>
+{{ end }}

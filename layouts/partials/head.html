@@ -1,17 +1,39 @@
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} | {{ .Site.Title }}{{ end }}</title>
-{{ with .Site.Params.description }}<meta name="description" content="{{ . }}">{{ end }}
+<title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} · {{ .Site.Title }}{{ end }}</title>
+{{ $desc := .Site.Params.description }}
+{{ if and .IsPage .Summary }}{{ $desc = .Summary | plainify | truncate 160 }}{{ end }}
+<meta name="description" content="{{ $desc }}">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#f7f4ef" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141311" media="(prefers-color-scheme: dark)">
+<link rel="canonical" href="{{ .Permalink }}">
+{{ with .Site.Params.favicon }}<link rel="icon" href="{{ . | relURL }}">{{ end }}
+{{ with .OutputFormats.Get "rss" }}<link rel="alternate" type="application/rss+xml" href="{{ .Permalink }}" title="{{ $.Site.Title }}">{{ end }}
 
-<!-- Font Awesome 6 -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" referrerpolicy="no-referrer" />
+{{/* Open Graph */}}
+<meta property="og:title" content="{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }}{{ end }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
+<meta property="og:url" content="{{ .Permalink }}">
+{{ with (.Resources.ByType "image").GetMatch "*" }}{{ with .Resize "1200x webp q80" }}<meta property="og:image" content="{{ .Permalink }}">{{ end }}{{ end }}
+<meta name="twitter:card" content="summary_large_image">
 
-{{ $style := resources.Get "sass/main.scss" | resources.ToCSS | resources.Minify | resources.Fingerprint }}
-<link rel="stylesheet" href="{{ $style.Permalink }}" integrity="{{ $style.Data.Integrity }}" media="screen">
+{{/* Set theme before first paint to avoid a flash */}}
+<script>
+  (function () {
+    try {
+      var t = localStorage.getItem("theme");
+      if (t === "light" || t === "dark") document.documentElement.dataset.theme = t;
+    } catch (e) {}
+  })();
+</script>
 
-{{ if .Site.Params.favicon }}
-<link rel="shortcut icon" type="image/x-icon" href="{{ .Site.Params.favicon | relURL }}">
-{{ end }}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400&display=swap">
 
-{{ partial "head_custom.html" . }}
+{{ $css := resources.Get "css/site.css" | minify | fingerprint }}
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+{{ if hugo.IsProduction }}{{ template "_internal/google_analytics.html" . }}{{ end }}

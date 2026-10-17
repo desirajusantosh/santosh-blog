@@ -17,24 +17,22 @@ jobs:
           submodules: true
           fetch-depth: 0
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'       # Node 18 LTS is a safe choice
-
-      - name: Install PostCSS CLI and plugins
-        run: |
-          npm install -g postcss-cli autoprefixer
-
       - name: Setup Hugo (extended)
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: '0.112.5'
           extended: true
 
+      - name: Cache processed images
+        uses: actions/cache@v4
+        with:
+          path: resources/_gen
+          key: hugo-resources-${{ hashFiles('content/**/*.jpg', 'content/**/*.JPG', 'content/**/*.jpeg', 'content/**/*.png', 'layouts/**') }}
+          restore-keys: hugo-resources-
+
       - name: Build site
         run: |
-          hugo -t introduction -d public --gc --minify --baseURL "https://desirajusantosh.github.io/santosh-blog/"
+          hugo -d public --gc --minify --baseURL "https://desirajusantosh.github.io/santosh-blog/"
 
       - name: Ensure .nojekyll
         run: touch public/.nojekyll

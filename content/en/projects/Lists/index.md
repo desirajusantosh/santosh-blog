@@ -1,5 +1,6 @@
 ---
-title: "Uses "
+title: "Uses"
+description: "My desk setup, apps and everyday gear"
 weight: 1
 ---
 

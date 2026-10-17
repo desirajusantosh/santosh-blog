@@ -1,9 +1,6 @@
-<a href="https://github.com/desirajusantosh">
-  <i class="fab fa-github"></i>
-</a>
-<a href="https://twitter.com/">
-  <i class="fab fa-twitter"></i>
-</a>
-<a href="https://linkedin.com/in/yourusername">
-  <i class="fab fa-linkedin-in"></i>
-</a>
+<ul class="social">
+  {{ range .Site.Params.social }}
+  {{ $label := .label | default (.icon | humanize) }}
+  <li><a href="{{ .url }}" aria-label="{{ $label }}" title="{{ $label }}" {{ if not (hasPrefix .url "mailto:") }}target="_blank" rel="noopener"{{ end }}>{{ partial "icon.html" .icon }}</a></li>
+  {{ end }}
+</ul>
