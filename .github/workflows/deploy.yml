@@ -6,6 +6,11 @@ on:
       - main
       - master
 
+# master and main both deploy to gh-pages; queue runs so their pushes don't race
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: false
+
 jobs:
   build-deploy:
     runs-on: ubuntu-latest
