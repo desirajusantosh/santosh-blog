@@ -24,7 +24,6 @@ timeout = "10m"                   # first build resizes large photos; can take a
 
         localTime                = true                    # Show your current local time in contact section
         timeZone                 = "America/Los_Angeles"   # Your timezone as in the TZ* column of this list: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
-        timeFormat               = "h:mm A"                # https://momentjs.com/docs/#/displaying/format/
 
     # Social links appear in the intro and footer. Available icons live in layouts/partials/icon.html
     # (twitter, instagram, linkedin-in, github, paper-plane, mail).
