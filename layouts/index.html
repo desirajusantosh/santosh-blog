@@ -20,7 +20,6 @@
   </div>
   <div class="hero-art">
     <span class="sun" aria-hidden="true"></span>
-    <span class="tate" aria-hidden="true"><b>旅</b>と光</span>
     {{ with $about }}{{ with .Params.image }}{{ with $homeBundle.Resources.GetMatch . }}
     {{ $img := .Fill "720x900 Center webp q84" }}
     <figure class="hero-portrait">
@@ -43,7 +42,7 @@
 {{ $page := . }}
 <section class="section moments" id="moments">
   <div class="wrap section-head">
-    <span class="kanji">一</span>
+    <span class="num">01</span>
     <h2>Moments</h2>
     <a class="more" href="{{ .RelPermalink }}">All {{ len $photos }} {{ partial "icon.html" "arrow-right" }}</a>
   </div>
@@ -62,7 +61,7 @@
 {{ with .Site.GetPage "/projects" }}
 <section class="section wrap" id="photos">
   <div class="section-head">
-    <span class="kanji">二</span>
+    <span class="num">02</span>
     <h2>Collections</h2>
     <a class="more" href="{{ .RelPermalink }}">See all {{ partial "icon.html" "arrow-right" }}</a>
   </div>
@@ -75,7 +74,7 @@
 {{ with .Site.GetPage "/blog" }}
 <section class="section wrap" id="writing">
   <div class="section-head">
-    <span class="kanji">三</span>
+    <span class="num">03</span>
     <h2>Writing</h2>
     <a class="more" href="{{ .RelPermalink }}">All posts {{ partial "icon.html" "arrow-right" }}</a>
   </div>
@@ -86,7 +85,7 @@
 {{ with $about }}
 <section class="section wrap" id="about">
   <div class="section-head">
-    <span class="kanji">四</span>
+    <span class="num">04</span>
     <h2>{{ .Title }}</h2>
     <span></span>
   </div>

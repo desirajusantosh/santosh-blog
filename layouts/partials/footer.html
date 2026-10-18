@@ -1,7 +1,7 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
     <div>
-      <a class="brand" href="{{ "" | relLangURL }}"><span class="hanko" aria-hidden="true">旅</span>{{ .Site.Params.shortName | default .Site.Title }}</a>
+      <a class="brand" href="{{ "" | relLangURL }}"><span class="mark" aria-hidden="true"></span>{{ .Site.Params.shortName | default .Site.Title }}</a>
       <p>Learn · Explore · Build · Listen &nbsp;—&nbsp; © {{ now.Year }}</p>
     </div>
     {{ partial "social.html" . }}

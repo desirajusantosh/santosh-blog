@@ -3,7 +3,7 @@
 <header class="site-header">
   <div class="wrap header-inner">
     {{ $name := split (.Site.Params.shortName | default .Site.Title) " " }}
-    <a class="brand" href="{{ $home }}"><span class="hanko" aria-hidden="true">旅</span><span>{{ index $name 0 }}<span class="brand-rest"> {{ delimit (after 1 $name) " " }}</span></span></a>
+    <a class="brand" href="{{ $home }}"><span class="mark" aria-hidden="true"></span><span>{{ index $name 0 }}<span class="brand-rest"> {{ delimit (after 1 $name) " " }}</span></span></a>
     <nav class="site-nav" aria-label="Main">
       <a href="{{ "blog/" | relLangURL }}" {{ if eq $section "blog" }}aria-current="page"{{ end }}>Writing</a>
       <a href="{{ "projects/" | relLangURL }}" {{ if eq $section "projects" }}aria-current="page"{{ end }}>Photos &amp; lists</a>
