@@ -3,6 +3,7 @@
 {{ $homeBundle := .Site.GetPage "/home" }}
 {{ $about := $homeBundle.Resources.GetMatch "about.md" }}
 {{ $contact := $homeBundle.Resources.GetMatch "contact.md" }}
+{{ $gallery := .Site.GetPage "/projects/photography" }}
 
 <section class="hero wrap">
   <div class="hero-text">
@@ -12,33 +13,46 @@
     <h1 class="display">{{ replace $title $name (printf "<em>%s</em>" $name) | safeHTML }}</h1>
     {{ with $homeBundle }}
     <ul class="mantra">
-      {{ range split (.Content | plainify | replaceRE `\s+` " ") " " }}{{ with . }}<li>{{ . }}</li>{{ end }}{{ end }}
+      {{ range split (.Content | plainify | replaceRE `\s+` " " | replaceRE `\.` "") " " }}{{ with . }}<li>{{ . }}</li>{{ end }}{{ end }}
     </ul>
     {{ end }}
     {{ partial "social.html" . }}
   </div>
-  {{ with $about }}{{ with .Params.image }}{{ with $homeBundle.Resources.GetMatch . }}
-  {{ $img := .Fill "640x800 Center webp q84" }}
-  <figure class="hero-portrait">
-    <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="Portrait of {{ $.Site.Title }}" fetchpriority="high">
-  </figure>
-  {{ end }}{{ end }}{{ end }}
+  <div class="hero-art">
+    <span class="sun" aria-hidden="true"></span>
+    <span class="tate" aria-hidden="true"><b>旅</b>と光</span>
+    {{ with $about }}{{ with .Params.image }}{{ with $homeBundle.Resources.GetMatch . }}
+    {{ $img := .Fill "720x900 Center webp q84" }}
+    <figure class="hero-portrait">
+      <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="Portrait of {{ $.Site.Title }}" fetchpriority="high">
+    </figure>
+    {{ end }}{{ end }}{{ end }}
+  </div>
 </section>
 
-{{ with .Site.GetPage "/projects/photography" }}
+{{ with $gallery }}{{ with .Resources.GetMatch ($.Site.Params.home.bandImage | default "*golden-hills*") }}
+{{ $band := .Resize "2400x webp q80" }}
+<figure class="band">
+  <img src="{{ $band.RelPermalink }}" width="{{ $band.Width }}" height="{{ $band.Height }}" alt="{{ .Title }}" loading="lazy" decoding="async">
+  <figcaption><span>{{ .Title }}</span><span>Photographed by Santosh</span></figcaption>
+</figure>
+{{ end }}{{ end }}
+
+{{ with $gallery }}
 {{ $photos := sort (.Resources.ByType "image") "Params.weight" }}
 {{ $page := . }}
 <section class="section moments" id="moments">
   <div class="wrap section-head">
-    <h2><span class="num">01</span> Moments</h2>
-    <a class="more" href="{{ .RelPermalink }}">All {{ len $photos }} photos {{ partial "icon.html" "arrow-right" }}</a>
+    <span class="kanji">一</span>
+    <h2>Moments</h2>
+    <a class="more" href="{{ .RelPermalink }}">All {{ len $photos }} {{ partial "icon.html" "arrow-right" }}</a>
   </div>
   <div class="strip" tabindex="0" aria-label="Featured photos, scroll sideways">
     {{ range $i, $r := first 10 $photos }}
-    {{ $img := $r.Fill "520x650 Smart webp q80" }}
+    {{ $img := $r.Fill "560x746 Smart webp q80" }}
     <a class="strip-item" href="{{ $page.RelPermalink }}#photo-{{ add $i 1 }}">
-      <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $r.Title }}" loading="lazy" decoding="async">
-      <span class="strip-caption">{{ $r.Title }}</span>
+      <div class="frame"><img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $r.Title }}" loading="lazy" decoding="async"></div>
+      <span class="strip-caption"><span class="strip-num">{{ printf "%02d" (add $i 1) }}</span>{{ $r.Title }}</span>
     </a>
     {{ end }}
   </div>
@@ -48,7 +62,8 @@
 {{ with .Site.GetPage "/projects" }}
 <section class="section wrap" id="photos">
   <div class="section-head">
-    <h2><span class="num">02</span> Collections</h2>
+    <span class="kanji">二</span>
+    <h2>Collections</h2>
     <a class="more" href="{{ .RelPermalink }}">See all {{ partial "icon.html" "arrow-right" }}</a>
   </div>
   <div class="card-grid">
@@ -60,7 +75,8 @@
 {{ with .Site.GetPage "/blog" }}
 <section class="section wrap" id="writing">
   <div class="section-head">
-    <h2><span class="num">03</span> Recent writing</h2>
+    <span class="kanji">三</span>
+    <h2>Writing</h2>
     <a class="more" href="{{ .RelPermalink }}">All posts {{ partial "icon.html" "arrow-right" }}</a>
   </div>
   {{ partial "post-list.html" (first 6 .Pages.ByDate.Reverse) }}
@@ -68,23 +84,35 @@
 {{ end }}
 
 {{ with $about }}
-<section class="section wrap narrow" id="about">
-  <h2><span class="num">04</span> {{ .Title }}</h2>
-  <div class="prose about-prose">{{ .Content }}</div>
+<section class="section wrap" id="about">
+  <div class="section-head">
+    <span class="kanji">四</span>
+    <h2>{{ .Title }}</h2>
+    <span></span>
+  </div>
+  <div class="about-grid">
+    <dl class="about-aside">
+      <dt>Based</dt><dd>Bay Area, California</dd>
+      <dt>Work</dt><dd>Product · hardware &amp; software</dd>
+      <dt>Off-hours</dt><dd>Travel · food · photography · poker</dd>
+    </dl>
+    <div class="prose about-prose">{{ .Content }}</div>
+  </div>
 </section>
 {{ end }}
 
 <section class="section wrap contact" id="contact">
-  <div class="contact-card">
+  <div class="contact-inner">
+    <span class="sunset" aria-hidden="true"></span>
     <p class="eyebrow">Say hello</p>
-    <h2 class="display-sm">Let's <em>talk</em>.</h2>
+    <h2>Let's <em>talk</em>.</h2>
     {{ with $contact }}{{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}{{ end }}
     <p class="muted">Always up for a conversation about product, travel hacking, food or photography.</p>
     {{ with .Site.Params.email }}
     <a class="button" href="mailto:{{ . }}">{{ partial "icon.html" "mail" }} {{ . }}</a>
     {{ end }}
     {{ if .Site.Params.home.localTime }}
-    <p class="muted local-time" data-time-zone="{{ .Site.Params.home.timeZone }}"><span class="pulse" aria-hidden="true"></span> It's <span class="time">—</span> in the Bay Area right now.</p>
+    <div><p class="local-time" data-time-zone="{{ .Site.Params.home.timeZone }}">{{ partial "icon.html" "sun" }} <span class="time">—</span> in the Bay Area</p></div>
     {{ end }}
   </div>
 </section>

@@ -2,11 +2,9 @@
   {{ range . }}
   <li>
     <a href="{{ .RelPermalink }}">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006 · 01" }}</time>
       <span class="post-title">{{ .Title | markdownify }}</span>
-      <span class="post-meta">
-        {{ range first 1 (complement (slice "blog") (.Params.tags | default slice)) }}<span class="tag">{{ . }}</span>{{ end }}
-        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "Jan 2006" }}</time>
-      </span>
+      <span class="post-meta">{{ range first 1 (complement (slice "blog") (.Params.tags | default slice)) }}<span class="tag">{{ . }}</span>{{ end }}</span>
     </a>
   </li>
   {{ end }}
