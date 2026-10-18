@@ -176,3 +176,18 @@
     if (m && +m[1] >= 1 && +m[1] <= items.length) open(+m[1] - 1);
   });
 })();
+
+// ---------- Recommendations: category tabs ----------
+(function () {
+  var tabs = document.querySelectorAll(".rec-tab");
+  if (!tabs.length) return;
+  var cats = document.querySelectorAll(".rec-cat");
+  function select(id, push) {
+    tabs.forEach(function (t) { t.setAttribute("aria-selected", t.dataset.filter === id ? "true" : "false"); });
+    cats.forEach(function (c) { c.hidden = id !== "all" && c.dataset.cat !== id; });
+    if (push) history.replaceState(null, "", id === "all" ? location.pathname : "#" + id);
+  }
+  tabs.forEach(function (t) { t.addEventListener("click", function () { select(t.dataset.filter, true); }); });
+  var h = location.hash.slice(1);
+  if (h && document.querySelector('.rec-cat[data-cat="' + h + '"]')) select(h, false);
+})();

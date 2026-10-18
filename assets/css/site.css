@@ -352,3 +352,29 @@ html.lb-open { overflow: hidden; }
   .sun, .sunset { animation: rise-sun 1.6s cubic-bezier(.2,.7,.2,1) both .2s; }
   @keyframes rise-sun { from { opacity: 0; transform: translateY(30px); } }
 }
+
+/* ---------- Recommendations ---------- */
+.recs { padding-bottom: 72px; }
+.recs-head { padding-top: 8px; }
+.rec-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 8px; position: sticky; top: 0; z-index: 5; padding: 12px 0; background: var(--bg); }
+.rec-tab {
+  display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 999px; cursor: pointer;
+  border: 1px solid var(--line); background: transparent; color: var(--muted); font: 500 .9rem var(--font-sans); transition: all .2s ease;
+}
+.rec-tab:hover { color: var(--text); border-color: var(--text); }
+.rec-tab[aria-selected="true"] { background: var(--text); border-color: var(--text); color: var(--bg); }
+.rec-tab .count { font-family: var(--font-mono); font-size: .7rem; opacity: .7; }
+.rec-cat { padding-top: clamp(40px, 6vw, 72px); }
+.rec-cat[hidden] { display: none; }
+.rec-groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 12px 56px; }
+.rec-group .label { margin: 0 0 6px; }
+.rec-list { list-style: none; padding: 0; margin: 0 0 24px; }
+.rec-list a, .rec-row {
+  display: flex; align-items: baseline; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--line); text-decoration: none; color: inherit;
+}
+.rec-list li:first-child a, .rec-list li:first-child .rec-row { border-top: 1px solid var(--line); }
+.rec-name { font-family: var(--font-serif); font-size: 1.15rem; }
+.rec-note { color: var(--muted); font-size: .88rem; }
+.rec-list .icon { margin-left: auto; color: var(--muted); transition: transform .25s ease, color .25s ease; align-self: center; }
+.rec-list a:hover .rec-name { color: var(--accent); }
+.rec-list a:hover .icon { color: var(--accent); transform: translate(2px, -2px); }

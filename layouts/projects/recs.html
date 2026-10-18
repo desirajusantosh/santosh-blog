@@ -1,0 +1,55 @@
+{{ define "main" }}
+{{ $cats := .Params.categories }}
+<article class="wrap recs">
+  <a class="back" href="{{ .Parent.RelPermalink }}">{{ partial "icon.html" "arrow-left" }} Photos &amp; lists</a>
+  <header class="page-head recs-head">
+    <h1 class="display-sm">{{ .Title | markdownify }}</h1>
+    {{ with .Params.lede }}<p class="lede">{{ . }}</p>{{ end }}
+  </header>
+
+  <div class="rec-tabs" role="tablist" aria-label="Filter by category">
+    <button type="button" role="tab" class="rec-tab" data-filter="all" aria-selected="true">All</button>
+    {{ range $cats }}
+    {{ $n := 0 }}{{ range .groups }}{{ $n = add $n (len .items) }}{{ end }}
+    <button type="button" role="tab" class="rec-tab" data-filter="{{ .id }}" aria-selected="false">{{ .name }} <span class="count">{{ $n }}</span></button>
+    {{ end }}
+  </div>
+
+  {{ range $i, $c := $cats }}
+  <section class="rec-cat" id="{{ $c.id }}" data-cat="{{ $c.id }}">
+    <div class="section-head">
+      <span class="num">{{ printf "%02d" (add $i 1) }}</span>
+      <h2>{{ $c.name }}</h2>
+      <span></span>
+    </div>
+    <div class="rec-groups">
+      {{ range $c.groups }}
+      <div class="rec-group">
+        {{ with .title }}<p class="label">{{ . }}</p>{{ end }}
+        <ul class="rec-list">
+          {{ range .items }}
+          <li>
+            {{ if .url }}
+            <a href="{{ .url }}" target="_blank" rel="noopener">
+              <span class="rec-name">{{ .name }}</span>
+              {{ with .note }}<span class="rec-note">{{ . }}</span>{{ end }}
+              {{ partial "icon.html" "arrow-up-right" }}
+            </a>
+            {{ else }}
+            <span class="rec-row">
+              <span class="rec-name">{{ .name }}</span>
+              {{ with .note }}<span class="rec-note">{{ . }}</span>{{ end }}
+            </span>
+            {{ end }}
+          </li>
+          {{ end }}
+        </ul>
+      </div>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+
+  {{ with .Content }}<div class="prose narrow-prose">{{ . }}</div>{{ end }}
+</article>
+{{ end }}
