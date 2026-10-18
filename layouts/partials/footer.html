@@ -1,6 +1,9 @@
 <footer class="site-footer">
   <div class="wrap footer-inner">
-    <p>© {{ now.Year }} {{ .Site.Title }}</p>
+    <div>
+      <a class="brand" href="{{ "" | relLangURL }}">{{ .Site.Params.shortName | default .Site.Title }}</a>
+      <p class="muted">Learn. Explore. Build. Listen. &nbsp;·&nbsp; © {{ now.Year }}</p>
+    </div>
     {{ partial "social.html" . }}
   </div>
 </footer>

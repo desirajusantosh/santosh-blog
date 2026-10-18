@@ -1,30 +1,54 @@
 {{ define "bodyClass" }}is-home{{ end }}
 {{ define "main" }}
 {{ $homeBundle := .Site.GetPage "/home" }}
-{{ $intro := $homeBundle.Resources.GetMatch "index.md" }}
 {{ $about := $homeBundle.Resources.GetMatch "about.md" }}
 {{ $contact := $homeBundle.Resources.GetMatch "contact.md" }}
 
 <section class="hero wrap">
   <div class="hero-text">
     <p class="eyebrow">Product · Hardware · Travel · Photography</p>
-    <h1 class="display">{{ with $homeBundle }}{{ .Title | markdownify }}{{ else }}{{ .Site.Title }}{{ end }}</h1>
-    <div class="lede">{{ with $homeBundle }}{{ .Content }}{{ end }}</div>
+    {{ $title := $homeBundle.Title | default .Site.Title }}
+    {{ $name := index (last 1 (split $title " ")) 0 }}
+    <h1 class="display">{{ replace $title $name (printf "<em>%s</em>" $name) | safeHTML }}</h1>
+    {{ with $homeBundle }}
+    <ul class="mantra">
+      {{ range split (.Content | plainify | replaceRE `\s+` " ") " " }}{{ with . }}<li>{{ . }}</li>{{ end }}{{ end }}
+    </ul>
+    {{ end }}
     {{ partial "social.html" . }}
   </div>
   {{ with $about }}{{ with .Params.image }}{{ with $homeBundle.Resources.GetMatch . }}
-  {{ $img := .Fill "560x560 Center webp q82" }}
+  {{ $img := .Fill "640x800 Center webp q84" }}
   <figure class="hero-portrait">
-    <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="Portrait of {{ $.Site.Title }}">
+    <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="Portrait of {{ $.Site.Title }}" fetchpriority="high">
   </figure>
   {{ end }}{{ end }}{{ end }}
 </section>
 
-{{ $projects := .Site.GetPage "/projects" }}
-{{ with $projects }}
+{{ with .Site.GetPage "/projects/photography" }}
+{{ $photos := sort (.Resources.ByType "image") "Params.weight" }}
+{{ $page := . }}
+<section class="section moments" id="moments">
+  <div class="wrap section-head">
+    <h2><span class="num">01</span> Moments</h2>
+    <a class="more" href="{{ .RelPermalink }}">All {{ len $photos }} photos {{ partial "icon.html" "arrow-right" }}</a>
+  </div>
+  <div class="strip" tabindex="0" aria-label="Featured photos, scroll sideways">
+    {{ range $i, $r := first 10 $photos }}
+    {{ $img := $r.Fill "520x650 Smart webp q80" }}
+    <a class="strip-item" href="{{ $page.RelPermalink }}#photo-{{ add $i 1 }}">
+      <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="{{ $r.Title }}" loading="lazy" decoding="async">
+      <span class="strip-caption">{{ $r.Title }}</span>
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+
+{{ with .Site.GetPage "/projects" }}
 <section class="section wrap" id="photos">
   <div class="section-head">
-    <h2>Photos &amp; lists</h2>
+    <h2><span class="num">02</span> Collections</h2>
     <a class="more" href="{{ .RelPermalink }}">See all {{ partial "icon.html" "arrow-right" }}</a>
   </div>
   <div class="card-grid">
@@ -36,7 +60,7 @@
 {{ with .Site.GetPage "/blog" }}
 <section class="section wrap" id="writing">
   <div class="section-head">
-    <h2>Recent writing</h2>
+    <h2><span class="num">03</span> Recent writing</h2>
     <a class="more" href="{{ .RelPermalink }}">All posts {{ partial "icon.html" "arrow-right" }}</a>
   </div>
   {{ partial "post-list.html" (first 6 .Pages.ByDate.Reverse) }}
@@ -45,20 +69,23 @@
 
 {{ with $about }}
 <section class="section wrap narrow" id="about">
-  <h2>{{ .Title }}</h2>
-  <div class="prose">{{ .Content }}</div>
+  <h2><span class="num">04</span> {{ .Title }}</h2>
+  <div class="prose about-prose">{{ .Content }}</div>
 </section>
 {{ end }}
 
-<section class="section wrap narrow contact" id="contact">
-  <h2>Say hello</h2>
-  {{ with $contact }}{{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}{{ end }}
-  <p>Always up for a conversation about product, travel hacking, food or photography.</p>
-  {{ with .Site.Params.email }}
-  <a class="button" href="mailto:{{ . }}">{{ partial "icon.html" "mail" }} {{ . }}</a>
-  {{ end }}
-  {{ if .Site.Params.home.localTime }}
-  <p class="muted local-time" data-time-zone="{{ .Site.Params.home.timeZone }}">It's <span class="time">—</span> where I am.</p>
-  {{ end }}
+<section class="section wrap contact" id="contact">
+  <div class="contact-card">
+    <p class="eyebrow">Say hello</p>
+    <h2 class="display-sm">Let's <em>talk</em>.</h2>
+    {{ with $contact }}{{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}{{ end }}
+    <p class="muted">Always up for a conversation about product, travel hacking, food or photography.</p>
+    {{ with .Site.Params.email }}
+    <a class="button" href="mailto:{{ . }}">{{ partial "icon.html" "mail" }} {{ . }}</a>
+    {{ end }}
+    {{ if .Site.Params.home.localTime }}
+    <p class="muted local-time" data-time-zone="{{ .Site.Params.home.timeZone }}"><span class="pulse" aria-hidden="true"></span> It's <span class="time">—</span> in the Bay Area right now.</p>
+    {{ end }}
+  </div>
 </section>
 {{ end }}
