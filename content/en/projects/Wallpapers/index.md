@@ -54,10 +54,6 @@ resources:
     title: "Haleakalā above the clouds"
     params:
       weight: 13
-  - src: "tree-silhouette-wp.jpg"
-    title: "Tree silhouette"
-    params:
-      weight: 14
   - src: "white-roses-wp.jpg"
     title: "White roses"
     params:
@@ -142,10 +138,6 @@ resources:
     title: "Oak branches against the sunset"
     params:
       weight: 35
-  - src: "above-clouds-wing-wp.jpg"
-    title: "Above the clouds"
-    params:
-      weight: 36
   - src: "sunrise-above-clouds-wp.jpg"
     title: "Sunrise above the clouds"
     params:
