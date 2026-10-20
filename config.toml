@@ -24,6 +24,15 @@ timeout = "10m"                   # first build resizes large photos; can take a
 
         localTime                = true                    # Show your current local time in contact section
         timeZone                 = "America/Los_Angeles"   # Your timezone as in the TZ* column of this list: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+        place                    = "Bay Area"
+        # Photos that slowly crossfade behind the home page (filenames in content/en/projects/photography)
+        frames                   = ["*golden-hills*", "*haleakala-crater*", "*makena-cove-dusk*", "*oahu-golden-hour*", "*above-the-clouds*"]
+
+    # Live weather in the corner of the home page (Open-Meteo, free, no key). Delete this block to turn it off.
+    [params.home.weather]
+        lat  = 37.55
+        lon  = -122.05
+        unit = "fahrenheit"
 
     # Social links appear in the intro and footer. Available icons live in layouts/partials/icon.html
     # (twitter, instagram, linkedin-in, github, paper-plane, mail).

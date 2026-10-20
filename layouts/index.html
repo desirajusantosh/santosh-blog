@@ -5,37 +5,42 @@
 {{ $contact := $homeBundle.Resources.GetMatch "contact.md" }}
 {{ $gallery := .Site.GetPage "/projects/photography" }}
 
-<section class="hero wrap">
-  <div class="hero-text">
-    <p class="eyebrow">Product · Hardware · Travel · Photography</p>
-    {{ $title := $homeBundle.Title | default .Site.Title }}
-    {{ $name := index (last 1 (split $title " ")) 0 }}
-    <h1 class="display">{{ replace $title $name (printf "<em>%s</em>" $name) | safeHTML }}</h1>
-    {{ with $homeBundle }}
-    <ul class="mantra">
-      {{ range split (.Content | plainify | replaceRE `\s+` " " | replaceRE `\.` "") " " }}{{ with . }}<li>{{ . }}</li>{{ end }}{{ end }}
-    </ul>
+{{ $title := $homeBundle.Title | default .Site.Title }}
+{{ $frames := slice }}
+{{ with $gallery }}{{ range ($.Site.Params.home.frames | default (slice "*golden-hills*")) }}{{ with $gallery.Resources.GetMatch . }}{{ $frames = $frames | append . }}{{ end }}{{ end }}{{ end }}
+<section class="frame" aria-label="Introduction">
+  <div class="frame-media" aria-hidden="true">
+    {{ range $i, $r := $frames }}
+    {{ $img := $r.Resize "2400x webp q78" }}
+    <img class="frame-img{{ if eq $i 0 }} is-active{{ end }}" src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="" data-caption="{{ $r.Title }}" {{ if eq $i 0 }}fetchpriority="high"{{ else }}loading="lazy"{{ end }} decoding="async">
     {{ end }}
-    {{ partial "social.html" . }}
   </div>
-  <div class="hero-art">
-    <span class="sun" aria-hidden="true"></span>
-    {{ with $about }}{{ with .Params.image }}{{ with $homeBundle.Resources.GetMatch . }}
-    {{ $img := .Fill "720x900 Center webp q84" }}
-    <figure class="hero-portrait">
-      <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="Portrait of {{ $.Site.Title }}" fetchpriority="high">
-    </figure>
-    {{ end }}{{ end }}{{ end }}
-  </div>
-</section>
 
-{{ with $gallery }}{{ with .Resources.GetMatch ($.Site.Params.home.bandImage | default "*golden-hills*") }}
-{{ $band := .Resize "2400x webp q80" }}
-<figure class="band">
-  <img src="{{ $band.RelPermalink }}" width="{{ $band.Width }}" height="{{ $band.Height }}" alt="{{ .Title }}" loading="lazy" decoding="async">
-  <figcaption><span>{{ .Title }}</span><span>Photographed by Santosh</span></figcaption>
-</figure>
-{{ end }}{{ end }}
+  <div class="frame-ambient">
+    <span class="ambient-time local-time" data-time-zone="{{ .Site.Params.home.timeZone }}"><span class="time">—</span></span>
+    {{ with .Site.Params.home.weather }}<span class="ambient-weather" data-lat="{{ .lat }}" data-lon="{{ .lon }}" data-unit="{{ .unit | default "fahrenheit" }}" hidden></span>{{ end }}
+    <span class="ambient-place">{{ .Site.Params.home.place | default "Bay Area" }}</span>
+  </div>
+
+  <div class="frame-content wrap">
+    <p class="frame-hello">{{ $title }}.</p>
+    {{ with $homeBundle }}<p class="frame-mantra">{{ .Content | plainify | replaceRE `\s+` " " }}</p>{{ end }}
+    <nav class="frame-menu" aria-label="Sections">
+      {{ with $gallery }}<a href="#moments">Moments <sup>{{ len (.Resources.ByType "image") }}</sup></a>{{ end }}
+      {{ with .Site.GetPage "/projects" }}<a href="#photos">Collections <sup>{{ len .Pages }}</sup></a>{{ end }}
+      {{ with .Site.GetPage "/blog" }}<a href="#writing">Writing <sup>{{ len .Pages }}</sup></a>{{ end }}
+      <a href="#about">About</a>
+      <a href="#contact">Say hello</a>
+    </nav>
+  </div>
+
+  {{ if gt (len $frames) 0 }}
+  <div class="frame-caption">
+    <span class="frame-caption-text">{{ (index $frames 0).Title }}</span>
+    {{ if gt (len $frames) 1 }}<span class="frame-dots">{{ range $i, $r := $frames }}<button type="button" aria-label="Show photo {{ add $i 1 }}"{{ if eq $i 0 }} aria-current="true"{{ end }}></button>{{ end }}</span>{{ end }}
+  </div>
+  {{ end }}
+</section>
 
 {{ with $gallery }}
 {{ $photos := sort (.Resources.ByType "image") "Params.weight" }}
@@ -90,11 +95,20 @@
     <span></span>
   </div>
   <div class="about-grid">
-    <dl class="about-aside">
+    <div class="about-aside">
+      {{ with .Params.image }}{{ with $homeBundle.Resources.GetMatch . }}
+      {{ $img := .Fill "600x750 Center webp q84" }}
+      <figure class="about-portrait">
+        <span class="sun" aria-hidden="true"></span>
+        <img src="{{ $img.RelPermalink }}" width="{{ $img.Width }}" height="{{ $img.Height }}" alt="Portrait of {{ $.Site.Title }}" loading="lazy">
+      </figure>
+      {{ end }}{{ end }}
+      <dl>
       <dt>Based</dt><dd>Bay Area, California</dd>
       <dt>Work</dt><dd>Product · hardware &amp; software</dd>
       <dt>Off-hours</dt><dd>Travel · food · photography · poker</dd>
-    </dl>
+      </dl>
+    </div>
     <div class="prose about-prose">{{ .Content }}</div>
   </div>
 </section>

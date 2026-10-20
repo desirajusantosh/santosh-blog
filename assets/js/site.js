@@ -191,3 +191,48 @@
   var h = location.hash.slice(1);
   if (h && document.querySelector('.rec-cat[data-cat="' + h + '"]')) select(h, false);
 })();
+
+// ---------- Home frame: slow photo crossfade + live weather ----------
+(function () {
+  var frame = document.querySelector(".frame");
+  if (!frame) return;
+
+  var imgs = frame.querySelectorAll(".frame-img");
+  var dots = frame.querySelectorAll(".frame-dots button");
+  var caption = frame.querySelector(".frame-caption-text");
+  var i = 0, timer = null;
+  var still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function show(n) {
+    imgs[i].classList.remove("is-active");
+    if (dots[i]) dots[i].removeAttribute("aria-current");
+    i = (n + imgs.length) % imgs.length;
+    imgs[i].classList.add("is-active");
+    if (dots[i]) dots[i].setAttribute("aria-current", "true");
+    if (caption) caption.textContent = imgs[i].dataset.caption || "";
+  }
+  function play() {
+    if (still || imgs.length < 2) return;
+    clearInterval(timer);
+    timer = setInterval(function () { if (!document.hidden) show(i + 1); }, 8000);
+  }
+  dots.forEach(function (d, n) { d.addEventListener("click", function () { show(n); play(); }); });
+  play();
+
+  // Weather: one request to Open-Meteo (free, no key). Hidden if it fails.
+  var w = frame.querySelector(".ambient-weather");
+  if (!w || !window.fetch) return;
+  var words = { 0: "Clear", 1: "Mostly clear", 2: "Partly cloudy", 3: "Overcast", 45: "Fog", 48: "Fog",
+    51: "Drizzle", 53: "Drizzle", 55: "Drizzle", 61: "Rain", 63: "Rain", 65: "Heavy rain",
+    71: "Snow", 73: "Snow", 75: "Snow", 80: "Showers", 81: "Showers", 82: "Showers", 95: "Thunderstorm" };
+  var unit = w.dataset.unit === "celsius" ? "celsius" : "fahrenheit";
+  fetch("https://api.open-meteo.com/v1/forecast?latitude=" + w.dataset.lat + "&longitude=" + w.dataset.lon +
+        "&current=temperature_2m,weather_code&temperature_unit=" + unit)
+    .then(function (r) { return r.ok ? r.json() : Promise.reject(); })
+    .then(function (d) {
+      var c = d.current;
+      w.textContent = Math.round(c.temperature_2m) + "°" + (unit === "celsius" ? "C" : "F") + " · " + (words[c.weather_code] || "");
+      w.hidden = false;
+    })
+    .catch(function () {});
+})();
